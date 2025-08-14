@@ -11,9 +11,7 @@ func Server() {
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /products", http.HandlerFunc(handlers.GetProducts))
-
 	mux.Handle("POST /create-products", http.HandlerFunc(handlers.CreateProduct))
-
 	mux.Handle("GET /products/{productId}", http.HandlerFunc(handlers.GetProductByID))
 
 	globalRouter := global_router.GlobalRouter(mux)
