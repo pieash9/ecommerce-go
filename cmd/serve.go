@@ -2,17 +2,24 @@ package cmd
 
 import (
 	"ecommerce/global_router"
-	"ecommerce/handlers"
+	"ecommerce/middleware"
 	"fmt"
+	"log"
 	"net/http"
 )
 
+func GetMe(w http.ResponseWriter, r *http.Request) {
+	log.Println("AMI Data dibo")
+}
+
 func Server() {
+	manager := middleware.NewManager()
+
+	manager.Use(middleware.Logger, middleware.Hudai)
+
 	mux := http.NewServeMux()
 
-	mux.Handle("GET /products", http.HandlerFunc(handlers.GetProducts))
-	mux.Handle("POST /create-products", http.HandlerFunc(handlers.CreateProduct))
-	mux.Handle("GET /products/{productId}", http.HandlerFunc(handlers.GetProductByID))
+	initRoutes(mux, manager)
 
 	globalRouter := global_router.GlobalRouter(mux)
 
