@@ -12,26 +12,16 @@ func GetMe(w http.ResponseWriter, r *http.Request) {
 }
 
 func Server() {
-	manager := middleware.NewManager()
-
 	mux := http.NewServeMux()
 
-	// wrappedMux := manager.WrapMux(
-	// 	mux,
-	// 	middleware.Logger,
-	// 	middleware.Hudai,
-	// 	middleware.CorsWithPreflight,
-	// )
-
-	globalMiddlewares := []middleware.Middleware{
-		middleware.CorsWithPreflight,
-		middleware.Hudai,
+	manager := middleware.NewManager()
+	manager.Use(
+		middleware.Preflight,
+		middleware.Cors,
 		middleware.Logger,
-	}
+	)
 
-	manager.Use(middleware.CorsWithPreflight)
-
-	wrappedMux := manager.WrapMux(globalMiddlewares, mux)
+	wrappedMux := manager.WrapMux(mux)
 
 	initRoutes(mux, manager)
 
